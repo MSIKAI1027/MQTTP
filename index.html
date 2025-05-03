@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+  <meta charset="UTF-8">
+  <title>MQTT 控制介面</title>
+  <script src="https://unpkg.com/paho-mqtt/mqttws31.min.js"></script>
+</head>
+<body>
+  <h2>設備控制</h2>
+  <button onclick="sendCommand('on')">ON</button>
+  <button onclick="sendCommand('off')">OFF</button>
+
+  <script>
+    const clientID = "webClient_" + parseInt(Math.random() * 10000);
+    const client = new Paho.MQTT.Client("broker.mqttgo.io", 443, clientID);
+
+    client.connect({
+      onSuccess: onConnect,
+      useSSL: true
+    });
+
+    function onConnect() {
+      console.log("✅ 已連接到 MQTT broker");
+    }
+
+    function sendCommand(command) {
+      const topic = "MT901027/TEST";
+      const message = new Paho.MQTT.Message(command);
+      message.destinationName = topic;
+      client.send(message);
+      console.log("📤 發送: " + command);
+    }
+  </script>
+</body>
+</html>
