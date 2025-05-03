@@ -11,17 +11,13 @@
   <button onclick="sendCommand('off')">OFF</button>
 
   <script>
-    const clientID = "webClient_" + parseInt(Math.random() * 10000);
-    const client = new Paho.MQTT.Client("broker.mqttgo.io", 443, clientID);
+    const clientID = "webClient_" + Math.floor(Math.random() * 10000);
+    const client = new Paho.MQTT.Client("broker.mqttgo.io", 8084, clientID);
 
     client.connect({
-      onSuccess: onConnect,
+      onSuccess: () => console.log("✅ 已連接到 MQTT broker (8084, SSL)"),
       useSSL: true
     });
-
-    function onConnect() {
-      console.log("✅ 已連接到 MQTT broker");
-    }
 
     function sendCommand(command) {
       const topic = "MT901027/TEST";
